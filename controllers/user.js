@@ -2,21 +2,24 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const keys = require("../config/keys");
+const key = process.env.KEY;
 // Load input validation
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 // Load User model
 const User = require("../models/user");
-const Post = require("../models/post")
+router.get('/', (req,res) => {
+    res.json({status: 'working'})
+})
 
 router.get("/getData", async(req, res) => {
-  res.json( await User.find().populate('posts'))
+  res.json( await User.find().populate('tasks'))
 })
 // @route POST api/users/register
 // @desc Register user
 // @access Public
 router.post("/register", (req, res) => {
+    
     // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
   // Check validation
@@ -77,7 +80,7 @@ router.post("/login", (req, res) => {
   // Sign token
           jwt.sign(
             payload,
-            keys.secretOrKey,
+            key,
             {
               expiresIn: 31556926 // 1 year in seconds
             },

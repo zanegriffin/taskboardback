@@ -5,7 +5,11 @@ const taskSchema = new Schema (
     {
         title: String,
         description: String,
-        dueDate: Date
+        dueDate: Date,
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
     }
 )
 
